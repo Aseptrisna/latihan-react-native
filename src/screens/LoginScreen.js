@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import InputField from '../components/InputField';
+import { authService } from "../services/authService";
+import { guidApplication } from "../const/index";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState("");
 
-  const handleLogin = () => {
-    if (email === 'mahasiswa@mail.com' && password === '1234') {
-      navigation.replace('Home');
-    } else {
-      alert('Email atau Password salah!');
+
+  const handleLogin = async () => {
+    try {
+      const res = await authService.login({ guidApplication, email, password });
+      alert(res.message);
+      setMessage("Login berhasil!");
+      navigation.replace("Home");
+    } catch (err) {
+      alert(err.message);
+      setMessage(err.message || "Login gagal");
     }
   };
 
@@ -28,6 +36,12 @@ const LoginScreen = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('Register')}>
         <Text style={styles.link}>Belum punya akun? Daftar</Text>
       </TouchableOpacity>
+      {message ? <Text style={styles.message}>{message}</Text> : null}
+
+      <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+        <Text style={styles.link}>Lupa Password?</Text>
+      </TouchableOpacity>
+
     </View>
   );
 };
