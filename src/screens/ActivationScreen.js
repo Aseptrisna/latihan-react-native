@@ -15,7 +15,7 @@ const ActivationScreen = ({ navigation }) => {
                 guidApplication,
                 otp: Number(otp),
             });
-            alert(res.data.message);
+            // alert(res.data.message);
             setMessage("Akun berhasil diaktivasi! Silakan login.");
             setTimeout(() => navigation.replace("Login"), 1500);
         } catch (err) {

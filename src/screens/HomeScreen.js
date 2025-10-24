@@ -1,120 +1,122 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-  FlatList,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import React from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity, 
+  SafeAreaView, 
+  StatusBar 
+} from 'react-native';
 
-const HomeScreen = () => {
-  const navigation = useNavigation();
-
-  const menuItems = [
-    {
-      id: "1",
-      title: "Profil",
-      icon: "account-circle-outline",
-      color: "#4A90E2",
-      onPress: () => navigation.navigate("Profile"),
-    },
-    {
-      id: "2",
-      title: "Data Kamera",
-      icon: "video-outline",
-      color: "#50E3C2",
-      onPress: () => navigation.navigate("DataKamera"),
-    },
-  ];
-
-  const renderMenuItem = ({ item }) => (
-    <TouchableOpacity
-      style={[styles.menuCard, { backgroundColor: item.color }]}
-      onPress={item.onPress}
-    >
-      <Icon name={item.icon} size={40} color="#fff" />
-      <Text style={styles.menuTitle}>{item.title}</Text>
-    </TouchableOpacity>
-  );
-
+// Terima 'navigation' dari props
+const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      
+      {/* === HEADER === */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🏫 Aplikasi Mahasiswa</Text>
-        <Text style={styles.subtitle}>Selamat datang kembali 👋</Text>
+        <Text style={styles.headerTitle}>Beranda</Text>
+        <Text style={styles.headerSubtitle}>Selamat Datang di Aplikasi Mahasiswa</Text>
       </View>
 
-      <FlatList
-        data={menuItems}
-        renderItem={renderMenuItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-        contentContainerStyle={styles.menuContainer}
-      />
+      {/* === MENU LIST (Card Vertikal) === */}
+      <View style={styles.menuContainer}>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>© 2025 Aplikasi Mahasiswa</Text>
+        {/* --- Card 1: Data Mahasiswa --- */}
+        <TouchableOpacity 
+          style={styles.card} 
+          onPress={() => navigation.navigate('StudentList')}>
+          <Text style={styles.cardText}>Data Mahasiswa</Text>
+        </TouchableOpacity>
+
+        {/* --- Card 2: Buka Profil --- */}
+        <TouchableOpacity 
+          style={styles.card} 
+          onPress={() => navigation.navigate('Profile')}>
+          <Text style={styles.cardText}>Profile Saya</Text>
+        </TouchableOpacity>
+
+        {/* --- Card 3: Logout --- */}
+        <TouchableOpacity 
+          style={[styles.card, styles.cardLogout]} 
+          onPress={() => navigation.replace('Login')}>
+          <Text style={[styles.cardText, styles.logoutText]}>Logout</Text>
+        </TouchableOpacity>
+
       </View>
     </SafeAreaView>
   );
 };
 
-export default HomeScreen;
-
+// --- STYLESHEET ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: '#f0f2f5', // Latar belakang abu-abu muda
   },
+  // --- Header Styles ---
   header: {
-    padding: 20,
-    marginTop: 10,
-    alignItems: "center",
+    backgroundColor: '#4A90E2', // Warna biru modern
+    height: 180, // Sedikit lebih pendek
+    paddingTop: 40,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerTitle: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#333",
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#fff',
   },
-  subtitle: {
-    fontSize: 15,
-    color: "#666",
+  headerSubtitle: {
+    fontSize: 16,
+    color: '#fff',
+    opacity: 0.8,
     marginTop: 5,
   },
+  // --- Menu Card Styles ---
   menuContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  row: {
-    justifyContent: "space-between",
-  },
-  menuCard: {
     flex: 1,
-    height: 130,
+    alignItems: 'center', // Pusatkan kartu secara horizontal
+    padding: 20,
+    marginTop: -50, // <-- Trik agar card menimpa header
+  },
+  card: {
+    backgroundColor: '#fff',
+    width: '100%', // Buat kartu penuh lebar
+    height: 90, // Tinggi kartu
+    marginVertical: 10, // Jarak antar kartu
     borderRadius: 15,
-    marginBottom: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 3,
+    padding: 15,
+    alignItems: 'center', // Pusatkan teks
+    justifyContent: 'center', // Pusatkan teks
+    // Shadow untuk Android
+    elevation: 8,
+    // Shadow untuk iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
   },
-  menuTitle: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-    marginTop: 8,
+  cardText: {
+    fontSize: 20, // Perbesar teks karena tidak ada icon
+    fontWeight: '600',
+    color: '#333',
   },
-  footer: {
-    alignItems: "center",
-    padding: 10,
+  // --- Card Khusus Logout ---
+  cardLogout: {
+    backgroundColor: '#FFF0F0',
+    borderColor: '#E74C3C',
+    borderWidth: 1,
+    elevation: 4, 
   },
-  footerText: {
-    color: "#999",
-    fontSize: 12,
+  logoutText: {
+    color: '#E74C3C',
+    fontWeight: 'bold',
   },
 });
+
+export default HomeScreen;
